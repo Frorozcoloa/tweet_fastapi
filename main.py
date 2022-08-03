@@ -1,9 +1,9 @@
 from datetime import date, datetime
-from typing import Optional
+from typing import Optional, List
 from uuid import UUID
 from pydantic import BaseModel, EmailStr, Field
 
-from fastapi import FastAPI
+from fastapi import FastAPI, status
 
 app = FastAPI()
 
@@ -47,6 +47,82 @@ class Tweet(BaseModel):
     updated_at : Optional[datetime] = Field(None)
     by: User = Field(...)
 
+# Path Operation
+
 @app.get(path="/")
 def home():
     return {"Twitter API": "Working"}
+
+## User
+
+@app.post(
+    path="/singup",
+    response_model=User,
+    response_model_exclude={"password"},
+    status_code=status.HTTP_201_CREATED,
+    summary="Register a User",
+    tags=["User"]
+)
+def singup():
+    pass
+
+@app.post(
+    path="/login",
+    response_model=User,
+    response_model_exclude={"password"},
+    status_code=status.HTTP_200_OK,
+    summary="Login a User",
+    tags=["User"]
+)
+def login():
+    pass
+
+@app.get(
+    path="/users",
+    response_model=List[User],
+    response_model_exclude={"password"},
+    status_code=status.HTTP_200_OK,
+    summary="show all Users",
+    tags=["User"]
+)
+def show_all_user():
+    pass
+
+@app.get(
+    path="/user/{user_id}",
+    response_model=User,
+    response_model_exclude={"password"},
+    status_code=status.HTTP_200_OK,
+    summary="show aUser",
+    tags=["User"]
+)
+def show_a_user():
+    pass
+
+@app.delete(
+    path="/user/{user_id}/delete",
+    response_model=User,
+    response_model_exclude={"password"},
+    status_code=status.HTTP_200_OK,
+    summary="delete a User",
+    tags=["User"]
+)
+def delete_a_user():
+    pass
+
+@app.put(
+    path="/user/{user_id}/update",
+    response_model=User,
+    response_model_exclude={"password"},
+    status_code=status.HTTP_200_OK,
+    summary="update a User",
+    tags=["User"]
+)
+def update_a_user():
+    pass
+
+
+## Tweet
+
+
+
