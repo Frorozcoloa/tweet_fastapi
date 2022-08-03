@@ -60,7 +60,22 @@ class Tweet(BaseModel):
     tags=["User"]
 )
 def singup():
-    pass
+    """
+    Singup
+    This path operation register a user in the app
+
+    Parameters:
+        - Request body parameters
+            - user: User
+    Returns:
+        Json with the basic user information
+        - user_id: UUID
+        - email : EmailStr
+        - first_name : str
+        - last_name : str
+        - birthday: str
+    """
+    
 
 @app.post(
     path="/login",
