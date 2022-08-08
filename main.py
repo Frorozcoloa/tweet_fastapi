@@ -1,9 +1,10 @@
 from datetime import date, datetime
 from typing import Optional, List
 from uuid import UUID
+import json
 from pydantic import BaseModel, EmailStr, Field
 
-from fastapi import FastAPI, status
+from fastapi import Body, FastAPI, status
 
 app = FastAPI()
 
@@ -31,7 +32,7 @@ class User(BaseModel):
         min_length=1,
         max_length=50
     )
-    birth_dat : Optional[date] = Field(default=None)
+    birth_day : Optional[date] = Field(default=None)
 
 
 class Tweet(BaseModel):
@@ -59,7 +60,7 @@ class Tweet(BaseModel):
     summary="Register a User",
     tags=["User"]
 )
-def singup():
+def singup(user:User=Body(...,)):
     """
     Singup
     This path operation register a user in the app
@@ -73,8 +74,18 @@ def singup():
         - email : EmailStr
         - first_name : str
         - last_name : str
-        - birthday: str
+        - birthday: datetime
     """
+    with open("users.json", "r+", encoding="utf-8") as f:
+        result = json.loads(f.read())
+        user_dict = user.dict()
+        user_dict["user_id"] = str(user_dict["user_id"])
+        user_dict["birth_day"] = str(user_dict["birth_day"])
+        result.append(user_dict)
+        f.seek(0)
+        f.write(json.dumps(result))
+        return user
+
     
 
 @app.post(
@@ -87,6 +98,9 @@ def singup():
 )
 def login():
     pass
+   
+
+    
 
 @app.get(
     path="/users",
